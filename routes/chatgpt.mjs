@@ -10,6 +10,11 @@ export async function chatgpt() {
 
   // simply answer a question
   routes.get("/ask", async (req, res) => {
+    if (!process.env.OPENAI_API_KEY) {
+      res.status(501);
+      res.send("OPENAI_API_KEY not set");
+      return;
+    }
     const question = req.query.question ?? "";
     if (Array.isArray(question)) {
       res.sendStatus(400);
@@ -38,6 +43,11 @@ export async function chatgpt() {
 
   // solve a math equation from an image.
   routes.post("/solve", async (req, res) => {
+    if (!process.env.OPENAI_API_KEY) {
+      res.status(501);
+      res.send("OPENAI_API_KEY not set");
+      return;
+    }
     try {
       const contentType = req.headers["content-type"];
       console.log("content-type:", contentType);
