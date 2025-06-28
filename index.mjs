@@ -8,6 +8,7 @@ import { images } from "./routes/images.mjs";
 import { chat } from "./routes/chat.mjs";
 import { programs } from "./routes/programs.mjs";
 import { googleApi } from "./routes/googleApi.mjs";
+import { serverChatPage } from "./routes/serverChat.mjs";
 dot.config();
 
 async function main() {
@@ -42,6 +43,9 @@ async function main() {
 
   // Chat
   app.use("/chats", await chat());
+
+  // Server chat web page
+  app.use("/server_chat", serverChatPage());
 
   // Images
   app.use("/image", images());

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Server Chat</title>
+  <style>
+    body { font-family: sans-serif; }
+    #messages { white-space: pre; font-family: monospace; border: 1px solid #ccc; padding: 10px; height: 200px; overflow-y: auto; }
+    form { margin-top: 1em; }
+    label { margin-right: 0.5em; }
+  </style>
+</head>
+<body>
+  <h1>Server Chat</h1>
+  <div id="messages"></div>
+  <form id="sendForm">
+    <label>Room: <input id="room" type="number" value="0" /></label>
+    <label>ID: <input id="id" type="text" value="srv" /></label>
+    <input id="msg" type="text" placeholder="message" />
+    <button type="submit">Send</button>
+  </form>
+  <script>
+    async function load() {
+      const room = document.getElementById('room').value;
+      const resp = await fetch(`/chats/messages?c=${room}&p=0`);
+      if (resp.ok) {
+        const text = await resp.text();
+        document.getElementById('messages').textContent = text;
+      }
+    }
+
+    document.getElementById('sendForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const room = document.getElementById('room').value;
+      const id = document.getElementById('id').value;
+      const msg = document.getElementById('msg').value;
+      await fetch(`/chats/send?c=${room}&id=${encodeURIComponent(id)}&m=${encodeURIComponent(msg)}`);
+      document.getElementById('msg').value = '';
+      load();
+    });
+
+    load();
+  </script>
+</body>
+</html>
